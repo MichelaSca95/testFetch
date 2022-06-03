@@ -1,0 +1,109 @@
+
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <title>DIPENDENTI</title>
+        </head>
+
+<script>
+    function visualizza() {
+        let tabella =  '<tr><td><b>MATRICOLA</b></td><td><b>COGNOME</b></td><td><b>NOME</b></td><td><b>SESSO</b></td><td><b>CODICE FISCALE</b></td><td><b>CITTA</b></td><td><b>CAP</b></td><td><b>PROVINCIA</b></td><td><b>IBAN</b></td><td><b>DATA ASSUNZIONE</b></td><td><b>DATA DI NASCITA</b></td><td><b>LUOGO DI NASCITA</b></td><td><b>INDIRIZZO</b></td><td><b>-</b></td><td><b>-</b></td></tr>';
+        fetch('http://localhost:8090/', {
+                method : 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                for (let i = 0; i < data.length; ++i) {
+                    tabella += '<tr><td>' + data[i].matricola + '</td><td>' + data[i].cognome + '</td><td>' + data[i].nome + '</td><td>' + data[i].sesso + '</td><td>' + data[i].codiceFiscale + '</td><td>' + data[i].citta +'</td><td>' + data[i].cap +'</td><td>' + data[i].provincia +'</td><td>' + data[i].iban +'</td><td>' + data[i].dataAssunzione +'</td><td>' + data[i].dataNascita +'</td><td>' + data[i].luogoNascita +'</td><td>' + data[i].indirizzo +'</td><td><button onclick="del(' + data[i].id + ')">CANCELLA</button></td>' +'</td><td><button onclick="mostra(' + data[i].id + ')">MOSTRA</button></td><td><button onclick="modifica(' + data[i].id + ')">MODIFICA</button></td></tr>';
+                }
+                document.getElementById('tab').innerHTML = tabella;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    
+
+    function del(id) {
+        fetch('http://localhost:8090/cancella/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Elemento Cancellato');
+                visualizza();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    visualizza();
+
+    function mostra(id){
+        fetch('http://localhost:8090/mostra/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Dipendente Mostrato');
+                visualizza();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    function modifica(id){
+        fetch('http://localhost:8090/modifica/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Dipendente Modificato');
+                visualizza();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    
+
+</script>
+<body>
+<table id="tab">
+    <tr><td><b>MATRICOLA</b></td>
+        <td><b>COGNOME</b></td>
+        <td><b>NOME</b></td>
+        <td><b>SESSO</b></td>
+        <td><b>CODICE FISCALE</b>
+        </td><td><b>CITTA</b></td>
+        <td><b>CAP</b></td>
+        <td><b>PROVINCIA</b></td>
+        <td><b>IBAN</b></td>
+        <td><b>DATA DI ASSUNZIONE</b></td>
+        <td><b>DATA DI NASCITA</b></td>
+        <td><b>LUOGO DI NASCITA</b></td>
+        <td><b>INDIRIZZO</b></td>
+        <td><b>-</b></td>
+        <td><b>-</b></td></tr>
+        <button onclick=visualizza()>VISUALIZZA</button>
+</table>
+
+
+</body>
+</html>
